@@ -4,8 +4,8 @@ const { getArticle, postArticle } = require('./article')
 
 const router = new Router()
 
-router.get('/', topics)
-    .get('/topics', topics)
+router.get('/topics', topics)
+    .get('/topics/:tab/:page', topics)
     .get('/article/:title', getArticle)
     .post('/article/publish', postArticle)
 

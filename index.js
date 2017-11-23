@@ -24,13 +24,13 @@ mongoose.connect(MONGO_URL, {
         }
     )
 
-// 使用中间件
-app.use(logger())
+// 使用中间件   中间件使用顺序问题   遵循洋葱模型
+app.use(cors())
+    .use(logger())
     .use(BodyParser())
     .use(router.routes())
     .use(router.allowedMethods())
-    .use(cors())
 
 // 启动监听
 app.listen(3000)
-console.log('Server is listening port 3000, please click 127.0.0.1:3000/')
+console.log('Server is listening port 3000, please click http://127.0.0.1:3000/')
