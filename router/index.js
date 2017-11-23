@@ -1,9 +1,12 @@
-const router = require('koa-router')
+const Router = require('koa-router')
 const topics = require('./topics')
+const { getArticle, postArticle } = require('./article')
 
-const route = new router()
+const router = new Router()
 
-route.get('/', topics)
-route.get('/topics', topics)
+router.get('/', topics)
+    .get('/topics', topics)
+    .get('/article/:title', getArticle)
+    .post('/article/publish', postArticle)
 
-module.exports = route
+module.exports = router
