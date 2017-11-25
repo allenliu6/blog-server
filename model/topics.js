@@ -12,4 +12,4 @@ const Schema = mongoose.Schema
 //     commentCount: Number,
 // })
 
-module.exports = getTopics
+// module.exports = getTopics

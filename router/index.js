@@ -6,7 +6,7 @@ const router = new Router()
 
 router.get('/topics', topics)
     .get('/topics/:tab/:page', topics)
-    .get('/article/:title', getArticle)
+    .get('/article/:id', getArticle)
     .post('/article/publish', postArticle)
 
 module.exports = router

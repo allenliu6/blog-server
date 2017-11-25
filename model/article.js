@@ -20,7 +20,8 @@ const articleSchema = new Schema({
     summary: String,
     title: String,
     date: String,
-    lastModify: String
+    lastModify: String,
+    commentsCount: Number
 })
 
 const Article = mongoose.model('Article', articleSchema)
