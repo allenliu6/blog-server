@@ -1,9 +1,10 @@
 const Article = require('../model/article')
 
 module.exports = async (ctx) => {
-    console.log('get topics' + Object.values(ctx.params).join(" "))
-    const { tab = 'all', page = 1, limit = 10 } = ctx.params
+    console.log('get topics  ' + Object.values(ctx.query).join(" "))
+    const { tab = 'all', page = 1, limit = 10 } = ctx.query
     const skip = limit * (+page - 1)
+    
     if (tab === 'all') {
         const topics = await Article.find()
             .sort({ date: -1 })
@@ -45,7 +46,7 @@ module.exports = async (ctx) => {
                 commentsCount: 1
             })
             .catch(error => console.log(error))
-            
+
         let allNum = await Article.count().catch(err => {
             this.throw(500, '服务器内部错误')
         })
