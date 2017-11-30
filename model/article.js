@@ -15,6 +15,7 @@ const articleSchema = new Schema({
         }]
     }],
     content: String,
+    markdown: String,
     pv: Number,
     tab: [String],
     summary: String,

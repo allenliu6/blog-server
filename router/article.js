@@ -37,9 +37,27 @@ async function getArticle(ctx) {
     }
 }
 
-// 修改与发布接口  修改接口需要先获取数据  pv date等
+async function getOriginArticle(ctx) {
+    const article = await Article.find({
+        _id: ctx.query.id
+    })
+        .select({
+            markdown: 1,
+            title: 1,
+            tab: 1,
+            summary: 1,
+        })
+        .catch(error => console.log(error))
+
+    ctx.body = {
+        success: true,
+        article: article[0],
+    }
+}
+
+// 发布接口  
 async function postArticle(ctx) {
-    const entityContent = Object.assign({
+    const defaultBody = {
         content: 'hello world',
         pv: 0,
         tab: ['JavaScript'],
@@ -47,7 +65,9 @@ async function postArticle(ctx) {
         date: Date.now(),
         lastModify: Date.now(),
         commentsCount: 0
-    }, ctx.request.body),
+    }
+
+    const entityContent = Object.assign(defaultBody, ctx.request.body),
         article = new Article(entityContent)
 
     let createResult = await article.save().catch(error => {
@@ -58,11 +78,43 @@ async function postArticle(ctx) {
     console.log('文章创建成功', createResult);
     ctx.body = {
         success: true,
-        article: ctx.request.body.title
+        id: createResult._id
+    }
+}
+
+// 修改接口需要先获取数据
+async function updateArticle(ctx) {
+    const { id, ...updateBody} = ctx.request.body
+    updateBody.lastModify = Date.now()
+
+    const result = await Article.update({_id: id}, updateBody)
+        .catch(error => console.log(error))
+
+    // 正常 result.result    ok: 1  n: 1  nModified: 1
+    const success = result.ok && result.n && result.nModified
+
+    ctx.body = {
+        success,
+        id,
+    }
+}
+
+async function deleteArticle(ctx) {
+    const result = await Article.deleteOne({
+            _id: ctx.request.body.id
+        })
+        .catch(error => console.log(error))
+
+    // 正常 result.result    ok: 1  n: 1
+    ctx.body = {
+        success: !!result.result.ok
     }
 }
 
 module.exports = {
     getArticle,
-    postArticle
+    postArticle,
+    deleteArticle,
+    getOriginArticle,
+    updateArticle
 }
